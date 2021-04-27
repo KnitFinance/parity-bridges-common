@@ -843,7 +843,8 @@ dependencies = [
  "sp-api",
  "sp-runtime",
  "sp-std",
- ]
+ "sp-version",
+]
 
 [[package]]
 name = "bridge-runtime-common"
