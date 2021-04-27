@@ -32,8 +32,11 @@ pub use frame_support::{
 	},
 	StorageValue,
 };
+
 pub use pallet_balances::Call as BalancesCall;
+pub use pallet_bridge_grandpa::Call as GrandpaCall;
 pub use pallet_timestamp::Call as TimestampCall;
+
 use pallet_transaction_payment::CurrencyAdapter;
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
@@ -263,6 +266,18 @@ impl pallet_sudo::Config for Runtime {
 	type Call = Call;
 }
 
+parameter_types! {
+	pub const MaxRequests: u32 = 50;
+	pub const HeadersToKeep: u32 = 1024;
+}
+
+impl pallet_bridge_grandpa::Config for Runtime {
+	type BridgedChain = bp_millau::Millau;
+	type MaxRequests = MaxRequests;
+	type HeadersToKeep = HeadersToKeep;
+	type WeightInfo = ();
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime where
@@ -278,6 +293,7 @@ construct_runtime!(
 		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Pallet, Storage},
 		Sudo: pallet_sudo::{Pallet, Call, Config<T>, Storage, Event<T>},
+		BridgeMillau: pallet_bridge_grandpa::{Pallet, Call, Config<T>, Storage},
 	}
 );
 
@@ -424,6 +440,17 @@ impl_runtime_apis! {
 		}
 	}
 
+	impl bp_millau::MillauFinalityApi<Block> for Runtime {
+		fn best_finalized() -> (bp_millau::BlockNumber, bp_millau::Hash) {
+			let header = BridgeMillau::best_finalized();
+			(header.number, header.hash())
+		}
+
+		fn is_known_header(hash: bp_millau::Hash) -> bool {
+			BridgeMillau::is_known_header(hash)
+		}
+	}
+
 	impl pallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<Block, Balance> for Runtime {
 		fn query_info(
 			uxt: <Block as BlockT>::Extrinsic,
@@ -437,6 +464,7 @@ impl_runtime_apis! {
 		) -> pallet_transaction_payment::FeeDetails<Balance> {
 			TransactionPayment::query_fee_details(uxt, len)
 		}
+
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]

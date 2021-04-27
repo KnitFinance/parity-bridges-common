@@ -4,8 +4,8 @@ use sp_core::{sr25519, Pair, Public};
 use sp_finality_grandpa::AuthorityId as GrandpaId;
 use sp_runtime::traits::{IdentifyAccount, Verify};
 use template_runtime::{
-	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig, SystemConfig,
-	WASM_BINARY,
+	AccountId, AuraConfig, BalancesConfig, BridgeMillauConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig,
+	SystemConfig, WASM_BINARY,
 };
 
 // The URL for the telemetry server.
@@ -149,6 +149,11 @@ fn testnet_genesis(
 		pallet_sudo: SudoConfig {
 			// Assign network admin rights.
 			key: root_key,
+		},
+
+		pallet_bridge_grandpa: BridgeMillauConfig {
+			owner: Some(get_account_id_from_seed::<sr25519::Public>("Bob")),
+			..Default::default()
 		},
 	}
 }

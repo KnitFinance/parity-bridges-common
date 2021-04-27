@@ -8736,6 +8736,7 @@ dependencies = [
 name = "template-runtime"
 version = "3.0.0"
 dependencies = [
+ "bp-millau",
  "frame-benchmarking",
  "frame-executive",
  "frame-support",
@@ -8745,6 +8746,7 @@ dependencies = [
  "hex-literal 0.3.1",
  "pallet-aura",
  "pallet-balances",
+ "pallet-bridge-grandpa",
  "pallet-grandpa",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
