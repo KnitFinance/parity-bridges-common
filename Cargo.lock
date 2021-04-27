@@ -803,6 +803,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "bp-template"
+version = "0.1.0"
+dependencies = [
+ "bp-header-chain",
+ "bp-messages",
+ "bp-polkadot-core",
+ "bp-runtime",
+ "parity-scale-codec 2.0.1",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
+ "sp-version",
+]
+
+[[package]]
 name = "bp-test-utils"
 version = "0.1.0"
 dependencies = [
@@ -4172,6 +4187,7 @@ dependencies = [
  "bp-millau",
  "bp-rialto",
  "bp-runtime",
+ "bp-template",
  "bp-westend",
  "bridge-runtime-common",
  "frame-executive",
@@ -6024,6 +6040,24 @@ dependencies = [
  "sp-storage",
  "sp-trie",
  "sp-version",
+]
+
+[[package]]
+name = "relay-template-client"
+version = "0.1.0"
+dependencies = [
+ "bp-template",
+ "frame-support",
+ "frame-system",
+ "headers-relay",
+ "pallet-transaction-payment",
+ "parity-scale-codec 2.0.1",
+ "relay-substrate-client",
+ "relay-utils",
+ "sp-core",
+ "sp-keyring",
+ "sp-runtime",
+ "template-runtime",
 ]
 
 [[package]]
@@ -8552,6 +8586,7 @@ dependencies = [
  "bp-rialto",
  "bp-rococo",
  "bp-runtime",
+ "bp-template",
  "bp-westend",
  "bp-wococo",
  "bridge-runtime-common",
@@ -8577,6 +8612,7 @@ dependencies = [
  "relay-rialto-client",
  "relay-rococo-client",
  "relay-substrate-client",
+ "relay-template-client",
  "relay-utils",
  "relay-westend-client",
  "relay-wococo-client",
@@ -8588,13 +8624,14 @@ dependencies = [
  "sp-trie",
  "sp-version",
  "structopt",
+ "template-runtime",
 ]
 
 [[package]]
 name = "substrate-wasm-builder"
-version = "4.0.0"
+version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93a3d51ad6abbc408b03ea962062bfcc959b438a318d7d4bedd181e1effd0610"
+checksum = "79091baab813855ddf65b191de9fe53e656b6b67c1e9bd23fdcbff8788164684"
 dependencies = [
  "ansi_term 0.12.1",
  "atty",
@@ -8711,6 +8748,7 @@ dependencies = [
  "sc-consensus-aura",
  "sc-executor",
  "sc-finality-grandpa",
+ "sc-finality-grandpa-rpc",
  "sc-keystore",
  "sc-rpc",
  "sc-rpc-api",
