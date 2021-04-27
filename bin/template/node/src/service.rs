@@ -1,6 +1,5 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-use bridge_runtime::{self, opaque::Block, RuntimeApi};
 use sc_client_api::{ExecutorProvider, RemoteBackend};
 use sc_consensus_aura::{ImportQueueParams, SlotProportion, StartAuraParams};
 use sc_executor::native_executor_instance;
@@ -13,12 +12,13 @@ use sp_consensus_aura::sr25519::AuthorityPair as AuraPair;
 use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
 use std::time::Duration;
+use template_runtime::{self, opaque::Block, RuntimeApi};
 
 // Our native executor instance.
 native_executor_instance!(
 	pub Executor,
-	bridge_runtime::api::dispatch,
-	bridge_runtime::native_version,
+	template_runtime::api::dispatch,
+	template_runtime::native_version,
 	frame_benchmarking::benchmarking::HostFunctions,
 );
 

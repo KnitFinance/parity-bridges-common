@@ -17,9 +17,9 @@
 
 use crate::cli::{Cli, Subcommand};
 use crate::{chain_spec, service};
-use bridge_runtime::Block;
 use sc_cli::{ChainSpec, Role, RuntimeVersion, SubstrateCli};
 use sc_service::PartialComponents;
+use template_runtime::Block;
 
 impl SubstrateCli for Cli {
 	fn impl_name() -> String {
@@ -55,7 +55,7 @@ impl SubstrateCli for Cli {
 	}
 
 	fn native_runtime_version(_: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
-		&bridge_runtime::VERSION
+		&template_runtime::VERSION
 	}
 }
 
