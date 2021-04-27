@@ -27,6 +27,7 @@ pub mod wococo_headers_to_rococo;
 mod millau;
 mod rialto;
 mod rococo;
+mod template;
 mod westend;
 mod wococo;
 
