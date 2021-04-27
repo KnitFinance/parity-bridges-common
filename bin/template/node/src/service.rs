@@ -182,17 +182,42 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
 	let prometheus_registry = config.prometheus_registry().cloned();
 
 	let rpc_extensions_builder = {
+		use sc_finality_grandpa::FinalityProofProvider as GrandpaFinalityProofProvider;
+
+		use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApi};
+		use sc_finality_grandpa_rpc::{GrandpaApi, GrandpaRpcHandler};
+		use sc_rpc::DenyUnsafe;
+		use substrate_frame_rpc_system::{FullSystem, SystemApi};
+
+		let backend = backend.clone();
 		let client = client.clone();
 		let pool = transaction_pool.clone();
 
-		Box::new(move |deny_unsafe, _| {
-			let deps = crate::rpc::FullDeps {
-				client: client.clone(),
-				pool: pool.clone(),
-				deny_unsafe,
-			};
+		let justification_stream = grandpa_link.justification_stream();
+		let shared_authority_set = grandpa_link.shared_authority_set().clone();
+		let shared_voter_state = sc_finality_grandpa::SharedVoterState::empty();
 
-			crate::rpc::create_full(deps)
+		let finality_proof_provider =
+			GrandpaFinalityProofProvider::new_for_service(backend, Some(shared_authority_set.clone()));
+
+		Box::new(move |_, subscription_executor| {
+			let mut io = jsonrpc_core::IoHandler::default();
+			io.extend_with(SystemApi::to_delegate(FullSystem::new(
+				client.clone(),
+				pool.clone(),
+				DenyUnsafe::No,
+			)));
+			io.extend_with(TransactionPaymentApi::to_delegate(TransactionPayment::new(
+				client.clone(),
+			)));
+			io.extend_with(GrandpaApi::to_delegate(GrandpaRpcHandler::new(
+				shared_authority_set.clone(),
+				shared_voter_state.clone(),
+				justification_stream.clone(),
+				subscription_executor,
+				finality_proof_provider.clone(),
+			)));
+			io
 		})
 	};
 

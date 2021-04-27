@@ -15,7 +15,7 @@ use sp_transaction_pool::TransactionPool;
 use template_runtime::{opaque::Block, AccountId, Balance, Index};
 
 /// Full client dependencies.
-pub struct FullDeps<C, P> {
+pub struct _FullDeps<C, P> {
 	/// The client instance to use.
 	pub client: Arc<C>,
 	/// Transaction pool instance.
@@ -25,7 +25,7 @@ pub struct FullDeps<C, P> {
 }
 
 /// Instantiate all full RPC extensions.
-pub fn create_full<C, P>(deps: FullDeps<C, P>) -> jsonrpc_core::IoHandler<sc_rpc::Metadata>
+pub fn _create_full<C, P>(deps: _FullDeps<C, P>) -> jsonrpc_core::IoHandler<sc_rpc::Metadata>
 where
 	C: ProvideRuntimeApi<Block>,
 	C: HeaderBackend<Block> + HeaderMetadata<Block, Error = BlockChainError> + 'static,
@@ -39,7 +39,7 @@ where
 	use substrate_frame_rpc_system::{FullSystem, SystemApi};
 
 	let mut io = jsonrpc_core::IoHandler::default();
-	let FullDeps {
+	let _FullDeps {
 		client,
 		pool,
 		deny_unsafe,
